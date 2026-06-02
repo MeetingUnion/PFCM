@@ -47,9 +47,10 @@ function varargout = pfcm(data, options)
 %%%%%%%%%%%%% Initializations %%%%%%%%%%%%% 
 
 dataSize = size(data, 1);
-objFcn = zeros(options.MaxNumIteration, 1);                  % 目标函数数组
-fuzzyMatrix = fuzzy.clustering.initfcm(options, dataSize);   % 初始模糊隶属度
-possibilicticMatrix = fuzzy.clustering.initfcm(options, dataSize);   % 初始模糊隶属度
+objFcn = zeros(options.MaxNumIteration, 1);                          % 目标函数数组
+fuzzyMatrix = fuzzy.clustering.initfcm(options, dataSize);           % 初始模糊隶属度
+possibilicticMatrix = fuzzy.clustering.initfcm(options, dataSize);   % 初始可能性隶属度
+iterationProgressFormat = getString(message('fuzzy:general:lblFcm_iterationProgressFormat'));
 numClusters = options.NumClusters;
 expo = options.Exponent;                                    % 模糊指数因子
 eta = options.eta;                                          % 可能性指数因子
@@ -87,12 +88,12 @@ for iterId = 1 : options.MaxNumIteration
     brkCond = checkBreakCondition(options, objFcn(iterId : -1 : max(1, iterId-1)), iterId, brkCond);
 
     % Check verbose condition
-    % if options.Verbose
-    %     fprintf(iterationProgressFormat, iterId, objFcn(iterId));
-    %     if ~isempty(brkCond.description)
-    %         fprintf('%s\n',brkCond.description);
-    %     end
-    % end
+    if options.Verbose
+        fprintf(iterationProgressFormat, iterId, objFcn(iterId));
+        if ~isempty(brkCond.description)
+            fprintf('%s\n',brkCond.description);
+        end
+    end
 
     % Break if early termination condition is true.
     if brkCond.isTrue

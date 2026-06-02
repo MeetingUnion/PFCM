@@ -32,11 +32,11 @@ options = pfcmOptions(...
     NumClusters=3,...
     Exponent=2.0, ...
     MaxNumIteration=100, ...
-    MinImprovement=1e-6, Verbose=0, a = 1, b = 1, eta = 2, gamma = 6);
+    MinImprovement=1e-6, a=1);
 
-% % options.Verbose = false; 
+options.Verbose = false; 
 
-[centers,U] = pfcm(features, options);
+[centers,U, obj_func] = pfcm(features, options);
 
 
 for i = 1:6

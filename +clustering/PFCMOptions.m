@@ -3,11 +3,18 @@ classdef PFCMOptions < fuzzy.clustering.FCMOptions
 %   此处显示详细说明
     
     properties
-        a = 1;      % 模糊系数
-        b = 1;      % 可能性系数
-        eta = 2;    % 可能性指数因子
-        gamma = 6;
+        a {validateA} = clustering.PFCMOptions.DefaultA;      % 模糊系数
+        b {validateB} = clustering.PFCMOptions.DefaultB;      % 可能性系数
+        eta {validateEta} = clustering.PFCMOptions.DefaultEta;    % 可能性指数因子
+        gamma {validateGamma} = clustering.PFCMOptions.DefaultGamma;    % 惩罚因子
         % InitCenter = [];
+    end
+
+    properties(Constant, Hidden)
+        DefaultA = 1;
+        DefaultB = 1;
+        DefaultEta = 2;
+        DefaultGamma = 6;
     end
 
     methods
@@ -19,10 +26,10 @@ classdef PFCMOptions < fuzzy.clustering.FCMOptions
             p.CaseSensitive = false;        % 官方关闭大小写敏感
             p.KeepUnmatched = true;
 
-            addParameter(p, 'a', 1);
-            addParameter(p, 'b', 1);
-            addParameter(p, 'eta', 2);
-            addParameter(p, 'gamma', 6);
+            addParameter(p, 'a', clustering.PFCMOptions.DefaultA);
+            addParameter(p, 'b', clustering.PFCMOptions.DefaultB);
+            addParameter(p, 'eta', clustering.PFCMOptions.DefaultEta);
+            addParameter(p, 'gamma', clustering.PFCMOptions.DefaultGamma);
 
             parse(p, varargin{:});
 
@@ -44,6 +51,38 @@ classdef PFCMOptions < fuzzy.clustering.FCMOptions
         end
     end
 
-
 end
 
+%% local function
+function validateA(value)
+    validateattributes(value,...
+        {'numeric'},...
+        {'nonempty','scalar','real','finite','positive'},...
+        '',...
+        'a');
+end
+
+
+function validateB(value)
+    validateattributes(value,...
+        {'numeric'},...
+        {'nonempty','scalar','real','finite','positive'},...
+        '',...
+        'b');
+end
+
+function validateEta(value)
+    validateattributes(value,...
+        {'numeric'},...
+        {'nonempty','scalar','real','finite','>',1},...
+        '',...
+        'eta');
+end
+
+function validateGamma(value)
+    validateattributes(value,...
+    {'numeric'},...
+    {'nonempty','scalar','real','finite','positive'},...
+    '',...
+    'gamma');
+end
